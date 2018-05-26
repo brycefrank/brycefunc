@@ -1,0 +1,9 @@
+Package: brycefunc
+Title: R functions I use all the time.
+Version: 0.0
+Authors@R: person("Bryce", "Frank", email = "bryce.frank@oregonstate.edu", role = c("aut", "cre"))
+Description: Simple things.
+Depends: R (>= 3.4.4)
+License: MIT
+Encoding: UTF-8
+LazyData: true
