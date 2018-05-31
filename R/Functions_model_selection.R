@@ -9,7 +9,7 @@ library(plyr)
 library(sp)
 #library(lmtest)
 library(boot)
-library(rgdal)
+#library(rgdal)
 #library(maptools)
 
 standardized<-function(res,mcp,sigma_e,nu){
