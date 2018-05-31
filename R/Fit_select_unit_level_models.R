@@ -7,9 +7,9 @@
 #I had them there and I have not cleaned those dependencies.
 library(sae)
 
-source("scripts/Functions_model_selection.R")
-source("Panther_creek/Scripts/R_Scripts/Paco/Auxiliary_new.R")
-source("Panther_creek/Scripts/R_Scripts/Paco/EBLUPS.R")
+source("Functions_model_selection.R")
+source("Auxiliary_new.R")
+source("EBLUPS.R")
 
 #read the table for the sample
 Blobs_all<- read.csv("blobs_ws3_hs15/model_data.csv")
