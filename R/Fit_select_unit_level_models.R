@@ -6,9 +6,6 @@
 #This is a template to do de model selection. There are libraries that you probably dont need
 #I had them there and I have not cleaned those dependencies.
 library(sae)
-library(raster)
-library(sp)
-library(rgdal)
 
 source("scripts/Functions_model_selection.R")
 source("Panther_creek/Scripts/R_Scripts/Paco/Auxiliary_new.R")
