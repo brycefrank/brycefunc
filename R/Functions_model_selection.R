@@ -13,6 +13,7 @@ library(boot)
 #library(maptools)
 
 #' Standardizes residuals
+#' @export
 standardized<-function(res,mcp,sigma_e,nu){
 	
 	res/(sigma_e*(mcp^nu))
@@ -70,6 +71,7 @@ fit_four<-function(data,model_formula,weights,randomef){
 	
 }
 
+#' @export
 compare_four_models<-function(four_model_list){
 	
 	m00m10<-try(anova(update(four_model_list$m00,.~.,method="ML"),
@@ -84,6 +86,7 @@ compare_four_models<-function(four_model_list){
 	res
 }
 
+#' @export
 select_model<-function(four_model_list,mixed=TRUE){
 	
 	res<-compare_four_models(four_model_list)
@@ -150,6 +153,7 @@ select_model<-function(four_model_list,mixed=TRUE){
 	four_model_list[[selected]]
 }
 
+#' @export
 five_plot<-function(fitted_model,exp){
 	
 	if(class(fitted_model)=="try-error"){
@@ -213,6 +217,7 @@ five_plot<-function(fitted_model,exp){
 		
 }
 
+#' @export
 simplify_model_list<-function(x){
 	
 	for(i in c(1:length(x))){
@@ -269,6 +274,7 @@ simplify_model_list<-function(x){
 	x
 }
 
+#' @export
 model_pars<-function(model,data_validation=NULL){
 	
 	if(class(model)=="try-error"){
@@ -438,6 +444,7 @@ summary.model_list<-function(x,data_validation){
 	
 }
 
+#' @export
 plot.extended_leaps<-function(x,ordered=TRUE,minimize="RMSE",
 		type="pdf",output="Spatial_residuals/Output/selection"){
 	
@@ -525,12 +532,14 @@ plot.extended_leaps<-function(x,ordered=TRUE,minimize="RMSE",
 	
 }
 
+#' @export
 '[.model_list'<-function(x,i,j){
 	
 	x[[i]][[j]]
 	
 }
 
+#' @export
 '[.extended_leaps'<-function(x,i,j){
 
 	x$model_list[i,j]
@@ -634,6 +643,7 @@ fit_candidates<-function(training,validation,nameY,predictors,nvmax=8,nbest=5,ID
 	
 }
 
+#' @export
 fit_radius<-function(selection_list,training_data,validation_data,selected_models,
 		radii=7+c(11:1)*0.5,ID_SMA="ID_SMA"){
 	
@@ -707,6 +717,7 @@ fit_radius<-function(selection_list,training_data,validation_data,selected_model
 	
 }
 
+#' @export
 get_selected<-function(selection_radius,plot_ID="plot_ID",ID_SMA="ID_SMA",
 		mixed=FALSE,spatial=FALSE,no_aux=FALSE){
 	
@@ -821,6 +832,7 @@ get_selected<-function(selection_radius,plot_ID="plot_ID",ID_SMA="ID_SMA",
 	
 }
 
+#' @export
 models_pars<-function(fitted_models,
 		keep_cols=c("plot_ID","MU","dir","dist","radius","x","y"),include_y=TRUE){
 	
@@ -911,6 +923,7 @@ models_pars<-function(fitted_models,
 			residuals_validation=res_total_validation)
 }
 
+#' @export
 aggregate_res<-function(data,max_radius){
 	
 	add1<-data[data$dist+data$radius==max_radius,]
@@ -1168,6 +1181,7 @@ aggregate_res<-function(data,max_radius){
 	
 }
 
+#' @export
 fit_corfunc_gls<-function(data,type="Training",start_rho=15){
 	
 	data<-data[!is.na(data$cor),]
@@ -1199,6 +1213,7 @@ fit_corfunc_gls<-function(data,type="Training",start_rho=15){
 	results_gls
 }
 
+#' @export
 mixed_cor_model<-function(dist,rho,w,radius){
 	
 	rho1<-exp(rho)
@@ -1215,6 +1230,7 @@ mixed_cor_model<-function(dist,rho,w,radius){
 	
 }
 
+#' @export
 mixed_cor_modelc<-function(dist,rho,w,radius){
 
 	estim1<-ifelse(dist>=2*radius,0,
@@ -1228,6 +1244,7 @@ mixed_cor_modelc<-function(dist,rho,w,radius){
 	
 }
 
+#' @export
 mixed_cor_model_gaus<-function(dist,rho,w,radius){
 	
 	estim1<-ifelse(dist>=2*radius,0,
@@ -1241,6 +1258,7 @@ mixed_cor_model_gaus<-function(dist,rho,w,radius){
 	
 }
 
+#' @export
 grid_search<-function(start_rho,start_w,radius,max_rho,func,data){
 	
 	starts<-expand.grid(start_rho=start_rho,start_w=start_w)
@@ -1380,6 +1398,7 @@ grid_search<-function(start_rho,start_w,radius,max_rho,func,data){
 	ret<-list(ret=ret,def_sol1=def_sol1,def_sol2=def_sol2)
 }
 
+#' @export
 fit_corfunc_b_gls<-function(data,type="Training",start_rho=15,start_w=0.5,criteria=1){
 	
 	data<-data[!is.na(data$cor),]
@@ -1480,6 +1499,7 @@ fit_corfunc_b_gls<-function(data,type="Training",start_rho=15,start_w=0.5,criter
 	results_gls
 }
 
+#' @export
 fit_corfunc_c_gls<-function(data,type="Training",start_rho=15){
 	
 	data<-data[!is.na(data$cor),]
@@ -1513,6 +1533,7 @@ fit_corfunc_c_gls<-function(data,type="Training",start_rho=15){
 	results_gls
 }
 
+#' @export
 fit_corfunc_d_gls<-function(start_rho=15,start_w,max_rho,func=mixed_cor_modelc,data=data,type="Residuals"){
 	
 	data<-data[!is.na(data$cor),]
@@ -1550,6 +1571,7 @@ fit_corfunc_d_gls<-function(start_rho=15,start_w,max_rho,func=mixed_cor_modelc,d
 }
 
 #Other functions
+#' @export
 add_levels<-function(data,ID_SMA,all_levels){
 	
 	data[,ID_SMA]<-as.factor(data[,ID_SMA])
@@ -1561,6 +1583,7 @@ add_levels<-function(data,ID_SMA,all_levels){
 	
 }
 
+#' @export
 plot_errores<-function(lme.obj,variable,density,up=TRUE,left=TRUE,type="p",a=1.2,b=1.2,c=1.2,d=1.5){
 	
 #	if(up){par(oma=c(2,0,4,0))}else{par(oma=c(4,0,2,0))}
@@ -1639,6 +1662,7 @@ plot_errores<-function(lme.obj,variable,density,up=TRUE,left=TRUE,type="p",a=1.2
 	
 }
 
+#' @export
 plot_comb<-function(m1,m2,variable1,variable2,title,output,width,height,res=res,units="cm",type="p"){
 	
 #	postscript(output,height=height,width=width)
@@ -1686,6 +1710,7 @@ plot_comb<-function(m1,m2,variable1,variable2,title,output,width,height,res=res,
 }
 
 #selection of models
+#' @export
 prepare_model<-function(selection,variables,selected_model_number,ID_SMA="MU",
 		write.df=NULL,tol=1e-6,opt="optim"){
 	
@@ -2036,6 +2061,7 @@ prepare_model<-function(selection,variables,selected_model_number,ID_SMA="MU",
 	
 }
 
+#' @export
 prepare_model_optim<-function(selection,selected_model_number,ID_SMA="MU",
 		write.df=NULL,tol=1e-6){
 	
@@ -2453,6 +2479,7 @@ prepare_model_optim<-function(selection,selected_model_number,ID_SMA="MU",
 	
 }
 
+#' @export
 create_predictions_multivariate<-function(res_multivariate=res_multivariate,data=data){	
 	
 	ID_SMA<-res_multivariate$ID_SMA
