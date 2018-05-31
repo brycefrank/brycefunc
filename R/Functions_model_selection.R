@@ -12,12 +12,15 @@ library(boot)
 #library(rgdal)
 #library(maptools)
 
+#' Standardizes residuals
 standardized<-function(res,mcp,sigma_e,nu){
 	
 	res/(sigma_e*(mcp^nu))
 
 }
 
+#' Fits two models
+#' @export
 fit_two<-function(data,model_formula,weights,randomef,exp=0){
 	
 	model_formula<-formula(model_formula)
@@ -46,6 +49,7 @@ fit_two<-function(data,model_formula,weights,randomef,exp=0){
 	
 }
 
+#' @export
 fit_four<-function(data,model_formula,weights,randomef){
 	
 	model_formula<-formula(model_formula)
@@ -534,6 +538,8 @@ plot.extended_leaps<-function(x,ordered=TRUE,minimize="RMSE",
 	
 }
 
+#' Fits variables
+#' @export
 fit_variables<-function(training,validation,variables,predictors,nvmax=8,nbest=5,ID_SMA="ID_SMA",force=NULL,
 		exps=c(0:8)/4,type="jpeg",output="Spatial_residuals/Output/selection"){
 	
@@ -555,6 +561,8 @@ fit_variables<-function(training,validation,variables,predictors,nvmax=8,nbest=5
 	
 }
 
+#' Fits candidates
+#' @export
 fit_candidates<-function(training,validation,nameY,predictors,nvmax=8,nbest=5,ID_SMA="ID_SMA",force=NULL,
 		exps=c(0:8)/4,simplify=TRUE){
 	
