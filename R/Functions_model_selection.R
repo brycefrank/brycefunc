@@ -22,24 +22,23 @@ standardized<-function(res,mcp,sigma_e,nu){
 #' Fits two models
 #' @export
 fit_two<-function(data,model_formula,weights,randomef,exp=0){
-	
 	model_formula<-formula(model_formula)
 	weights<-formula(weights)
-#	weights1<-do.call("varPower",list(form=weights,fixed=exp))
+#	weights1<-do.call("nlme::varPower",list(form=weights,fixed=exp))
 	if(exp==0){
 		
-		fixed<-try(do.call("gls",list(model=model_formula,data=data,
+		fixed<-try(do.call(nlme::gls,list(model=model_formula,data=data,
 								method="REML",control=list(maxIter=1000,msMaxIter=1000))))
 		
-		mixed<-try(do.call("lme",list(fixed=model_formula,data=data,random=randomef,
+		mixed<-try(do.call(nlme::lme,list(fixed=model_formula,data=data,random=randomef,
 								method="REML",control=list(maxIter=1000,msMaxIter=1000))))
 		
 	}else{
 		
-		fixed<-try(do.call("gls",list(model=model_formula,data=data,weights=varPower(form=weights,fixed=exp),
+		fixed<-try(do.call(nlme::gls,list(model=model_formula,data=data,weights=nlme::varPower(form=weights,fixed=exp),
 								method="REML",control=list(maxIter=1000,msMaxIter=1000))))
 		
-		mixed<-try(do.call("lme",list(fixed=model_formula,data=data,random=randomef,weights=varPower(form=weights,fixed=exp),
+		mixed<-try(do.call(nlme::lme,list(fixed=model_formula,data=data,random=randomef,weights=nlme::varPower(form=weights,fixed=exp),
 								method="REML",control=list(maxIter=1000,msMaxIter=1000))))
 		
 	}
@@ -54,16 +53,16 @@ fit_four<-function(data,model_formula,weights,randomef){
 	
 	model_formula<-formula(model_formula)
 	weights<-formula(weights)
-	m00<-try(do.call("gls",list(model=formula(model_formula),data=data,
+	m00<-try(do.call(nlme::gls,list(model=formula(model_formula),data=data,
 							method="REML",control=list(maxIter=1000,msMaxIter=1000))))
 	
-	m01<-try(do.call("lme",list(fixed=formula(model_formula),data=data,random=randomef,
+	m01<-try(do.call(nlme::lme,list(fixed=formula(model_formula),data=data,random=randomef,
 							method="REML",control=list(maxIter=1000,msMaxIter=1000))))
 	
-	m10<-try(do.call("gls",list(model=formula(model_formula),data=data,weights=varPower(form=weights),
+	m10<-try(do.call(nlme::gls,list(model=formula(model_formula),data=data,weights=nlme::varPower(form=weights),
 							method="REML",control=list(maxIter=1000,msMaxIter=1000))))
 	
-	m11<-try(do.call("lme",list(fixed=formula(model_formula),data=data,random=randomef,weights=varPower(form=weights),
+	m11<-try(do.call(nlme::lme,list(fixed=formula(model_formula),data=data,random=randomef,weights=nlme::varPower(form=weights),
 							method="REML",control=list(maxIter=1000,msMaxIter=1000))))
 
 	res<-list(fixed0=m00,mixed0=m01,fixed1=m10,mixed1=m11)
@@ -294,7 +293,7 @@ model_pars<-function(model,data_validation=NULL){
 	
 	if(is_mixed){
 		
-		sigma_v<-as.numeric(VarCorr(model)["(Intercept)","StdDev"])
+		sigma_v<-as.numeric(nlme::VarCorr(model)["(Intercept)","StdDev"])
 		coefs<-model$coefficients$fixed
 		sigma_e<-model$sigma
 		
@@ -427,7 +426,7 @@ summary.model_list<-function(x,data_validation){
 				}
 				res2$candidate<-i
 				res2$model<-j
-				res<-rbind.fill(res,res2)
+				res<-plyr::rbind.fill(res,res2)
 
 			}
 			
@@ -565,7 +564,6 @@ fit_variables<-function(training,validation,variables,predictors,nvmax=8,nbest=5
 #' @export
 fit_candidates<-function(training,validation,nameY,predictors,nvmax=8,nbest=5,ID_SMA="ID_SMA",force=NULL,
 		exps=c(0:8)/4,simplify=TRUE){
-	
 	Y<-as.vector(training[,nameY])
 	predictors<-as.matrix(training[,predictors])
 	randomef<-as.formula(paste("~1|",ID_SMA,sep=""))
@@ -1919,7 +1917,7 @@ prepare_model<-function(selection,variables,selected_model_number,ID_SMA="MU",
 			data=multivariatedf,
 			random=random_formula,
 			correlation=corSymm(value =initcor,form =corr_formula),
-			weights=varComb(varIdent(value=1,~1|variable),varPower(form=~var_covariate,fixed=1)),
+			weights=varComb(varIdent(value=1,~1|variable),nlme::varPower(form=~var_covariate,fixed=1)),
 			control=list(opt=opt,maxIter=1000,
 					msMaxIter=1000,
 					niterEM=2000,
@@ -1931,7 +1929,7 @@ prepare_model<-function(selection,variables,selected_model_number,ID_SMA="MU",
 	multivariate_no_cor<-multivariate<-lme(fixed_formula,
 			data=multivariatedf,
 			random=random_formula,
-			weights=varComb(varIdent(value=1,~1|variable),varPower(form=~var_covariate,fixed=1)),
+			weights=varComb(varIdent(value=1,~1|variable),nlme::varPower(form=~var_covariate,fixed=1)),
 			control=list(opt=opt,maxIter=1000,
 					msMaxIter=1000,
 					niterEM=2000,
