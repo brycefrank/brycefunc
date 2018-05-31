@@ -569,7 +569,7 @@ fit_candidates<-function(training,validation,nameY,predictors,nvmax=8,nbest=5,ID
 	Y<-as.vector(training[,nameY])
 	predictors<-as.matrix(training[,predictors])
 	randomef<-as.formula(paste("~1|",ID_SMA,sep=""))
-	candidates_obj<-regsubsets(x=predictors,y=Y,nbest=nbest,nvmax=nvmax,
+	candidates_obj<-leaps::regsubsets(x=predictors,y=Y,nbest=nbest,nvmax=nvmax,
 			method="exhaustive",names=colnames(predictors),really.big=TRUE)
 	candidates<-summary(candidates_obj)
 
