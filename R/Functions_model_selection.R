@@ -22,7 +22,7 @@ standardized<-function(res,mcp,sigma_e,nu){
 
 #' Fits two models
 #' @export
-fit_two<-function(data,model_formula,weights,randomef,exp=0){
+fit_two<-function(data,model_formula,weights,randomef,exp=0, model_index){
 	model_formula<-formula(model_formula)
 	weights<-formula(weights)
 #	weights1<-do.call("nlme::varPower",list(form=weights,fixed=exp))
@@ -41,7 +41,6 @@ fit_two<-function(data,model_formula,weights,randomef,exp=0){
 		
 		mixed<-try(do.call(nlme::lme,list(fixed=model_formula,data=data,random=randomef,weights=nlme::varPower(form=weights,fixed=exp),
 								method="REML",control=list(maxIter=1000,msMaxIter=1000))))
-		
 	}
 	
 	res<-list(fixed=fixed,mixed=mixed)
@@ -618,7 +617,7 @@ fit_candidates<-function(training,validation,nameY,predictors,nvmax=8,nbest=5,ID
 			models_i<-c()
 			for(j in exps){
 					
-				two_models<-fit_two(training,model_formula,weights,randomef,exp=j)
+				two_models <- fit_two(training, model_formula, weights, randomef, exp=j, model_index = i)
 				models_i<-c(models_i,two_models)
 				
 			}
@@ -2744,3 +2743,14 @@ create_predictions_multivariate<-function(res_multivariate=res_multivariate,data
 	
 }
 
+#' @export
+paco_pdf <- function(model_frame, nvmax = 5, nbest = 5, ID_SMA) {
+	for(i in variables){
+  		selection <- fit_candidates(model_frame, model_frame, i, predictors, nvmax = 5, 
+                            nbest = 5, ID_SMA = "OI_KEY", force = NULL, exps = c(0,0.5,1),simplify=FALSE)
+  		selection_list <- c(selection_list,list(selection))
+	}
+
+	names(selection_list) <- variables
+	return(selection_list)
+}
